@@ -25,12 +25,43 @@ public class SpringShopJpaApplication implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
-		// categoryRepository.save(new Category("Samsung"));
-		 articleRepository.save(new Article("Samsung","S9",  250));
+		Category smartphone = categoryRepository.save(new Category("Smartphone"));
+		Category tablet = categoryRepository.save(new Category("Tablet"));
+		Category pc = categoryRepository.save(new Category("PC"));
 		
-		for(Article article : articleRepository.findByBrand("Samsung")) {
-			System.out.println((article));
+		articleRepository.save(new Article( "Samsung","S10", 500, smartphone));
+		articleRepository.save(new Article( "Samsung","S9", 350, smartphone));
+		articleRepository.save(new Article( "Xiaomi","MI10", 100, smartphone));
+		
+		articleRepository.save(new Article( "Samsung","GalaxyTab", 450, tablet));
+		articleRepository.save(new Article( "Apple","Ipad", 350, tablet));
+		
+		articleRepository.save(new Article( "Asus","R510", 500, pc));
+		
+		for(Article article : articleRepository.findByCategoryId((long) 1)) {
+			System.out.println(article);
 		}
+		// categoryRepository.save(new Category("Samsung"));
+//		 articleRepository.save(new Article("Samsung","S9",  250));
+		
+//		for(Article article : articleRepository.findByBrand("Samsung")) {
+//			System.out.println((article));
+//		}
+		
+//		for(Article article : articleRepository.findByBrandAndPrice("Samsung",250)) {
+//			System.out.println((article));
+//		}
+//		for(Article article : articleRepository.findByDescriptionAndPriceLessThan("Samsung",350)) {
+//			System.out.println((article));
+//		}
+		
+		//for(Article article : articleRepository.searchArticles("sung", 200)) {
+		//	System.out.println(article);
+		//}
+		
+//		for(Article article : articleRepository.findByBrandContainingAndPriceGreaterThan("sung", 200)) {
+//			System.out.println(article);
+//		}
 	}
 
 }

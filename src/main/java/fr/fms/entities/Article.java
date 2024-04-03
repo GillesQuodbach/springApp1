@@ -17,9 +17,17 @@ public class Article implements Serializable {
 	private String description;
 	private double price;
 	
+	@ManyToOne
+	public Category category; // plusieurs artciles sont liés à une seule categorie
+	
 	public Article() {}
 	
-
+	public Article(String brand, String description, double price, Category category) {
+		this.brand = brand;
+		this.description = description;
+		this.price = price;
+		this.category = category;
+	}
 	
 	public Article(Long id, String brand, String description, double price) {
 		this.id = id;
@@ -41,4 +49,5 @@ public class Article implements Serializable {
 		this.description = description;
 		this.price = price;
 	}
+
 }
