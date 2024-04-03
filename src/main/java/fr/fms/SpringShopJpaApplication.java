@@ -77,6 +77,11 @@ public class SpringShopJpaApplication implements CommandLineRunner{
 		for (Category category : categoryRepository.findByOrderByNameAsc()) {
 			System.out.println(category);
 		}
+		
+		// Exo 1.7
+		for (Category category : categoryRepository.findByNameStartingWith("Ta")) {
+			System.out.println(category);
+		}
 		// categoryRepository.save(new Category("Samsung"));
 //		 articleRepository.save(new Article("Samsung","S9",  250));
 		

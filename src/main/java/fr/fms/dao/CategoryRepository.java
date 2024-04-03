@@ -13,5 +13,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>{
 public List<Category> findByOrderByNameDesc();
 
 public List<Category> findByOrderByNameAsc();
+
+public List<Category> findByNameStartingWith(String str);
 	
 }
