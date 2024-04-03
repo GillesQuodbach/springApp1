@@ -10,6 +10,8 @@ import fr.fms.entities.*;
 
 public interface CategoryRepository extends JpaRepository<Category, Long>{
 
+public List<Category> findByOrderByNameDesc();
 
+public List<Category> findByOrderByNameAsc();
 	
 }

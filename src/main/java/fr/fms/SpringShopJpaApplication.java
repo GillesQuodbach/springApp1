@@ -4,6 +4,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.fms.dao.ArticleRepository;
 import fr.fms.dao.CategoryRepository;
@@ -40,6 +44,38 @@ public class SpringShopJpaApplication implements CommandLineRunner{
 		
 		for(Article article : articleRepository.findByCategoryId((long) 1)) {
 			System.out.println(article);
+		}
+		
+		//Exo 1.2
+		for(Article article : articleRepository.findByBrandLike("Xiaomi")) {
+			System.out.println(article);
+		}
+		
+		for(Article article : articleRepository.findByDescriptionIs("S10")) {
+			System.out.println(article);
+		}
+		
+		for (Article article : articleRepository.findAll()) {
+			System.out.println(article);
+		}
+		//Exo 1.3
+		for (Article article : articleRepository.findByDescriptionAndBrandContains("S10", "Samsung")) {
+			System.out.println(article);
+		}
+		
+		// Exo 1.4
+		articleRepository.deleteById((long)1);
+	
+		// Exo 1.5
+		articleRepository.updateArticle("Test", "merdouille", 1000, 1L, 2L);
+		
+		// Exo 1.6
+		// Ajout EAGER dans Category.java @OneToMany
+		for (Category category : categoryRepository.findByOrderByNameDesc()) {
+			System.out.println(category);
+		}
+		for (Category category : categoryRepository.findByOrderByNameAsc()) {
+			System.out.println(category);
 		}
 		// categoryRepository.save(new Category("Samsung"));
 //		 articleRepository.save(new Article("Samsung","S9",  250));
