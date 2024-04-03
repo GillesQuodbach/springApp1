@@ -1,6 +1,9 @@
 package fr.fms;
 
 import org.springframework.boot.CommandLineRunner;
+
+import java.util.Scanner;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,10 +28,21 @@ public class SpringShopJpaApplication implements CommandLineRunner{
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringShopJpaApplication.class, args);
+	
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.println("Bienvenue sur ShopApp");
+		System.out.println("1: Afficher tous les articles SANS pagination");
+		System.out.println("2: Afficher tous les articles AVEC pagination");
+		
+		int paginationChoice = scan.nextInt();
+		scan.nextLine();
 	}
 	
 	@Override
 	public void run(String... args) throws Exception {
+	
+		/*
 		Category smartphone = categoryRepository.save(new Category("Smartphone"));
 		Category tablet = categoryRepository.save(new Category("Tablet"));
 		Category pc = categoryRepository.save(new Category("PC"));
@@ -103,6 +117,8 @@ public class SpringShopJpaApplication implements CommandLineRunner{
 //		for(Article article : articleRepository.findByBrandContainingAndPriceGreaterThan("sung", 200)) {
 //			System.out.println(article);
 //		}
+ * *
+ */
+		
 	}
-
 }
