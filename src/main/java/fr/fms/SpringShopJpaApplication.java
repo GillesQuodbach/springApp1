@@ -58,7 +58,6 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 			System.out.println("Entrer votre choix:");
 			try {
 				int customerChoice = Integer.parseInt(scan.nextLine());
-			
 
 				userInputError = false;
 
@@ -87,49 +86,100 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					break;
 				case 3:
 					System.out.println("Ajouter un article");
-
 					System.out.println();
-					// articleRepository.save(new Article("Samsung", "S10", 500, smartphone));
 
+					try {
+						String brand = "";
+						String description = "";
+						double price = 0;
+						String category = "";
+						System.out.println("Enter new article brand:");
+						brand = scan.nextLine();
+						System.out.println("Enter new article description:");
+						description = scan.nextLine();
+						System.out.println("Enter new article price");
+						price = Integer.parseInt(scan.nextLine());
+						System.out.println("Enter new article category:");
+						category = scan.nextLine();
+
+						Category existingCategory = categoryRepository.findByName((String) category);
+						if (existingCategory == null) {
+							existingCategory = categoryRepository.save(new Category(category));
+						}
+						articleRepository.save(new Article(brand, description, price, existingCategory));
+						System.out.println("New article successfully created");
+					} catch (Exception e) {
+						System.out.println(e);
+					}
+					break;
+				case 4:
+					int articleIdToDisplay = -1;
+					System.out.println("Display an article");
+					System.out.println("Enter article Id: ");
+					articleIdToDisplay = Integer.parseInt(scan.nextLine());
+					System.out.println(articleRepository.findById((long) articleIdToDisplay));
+					break;
+				case 5:
+					int articleIdToDelete = -1;
+					System.out.println("Supprimer un article");
+					System.out.println("Enter article Id: ");
+					articleIdToDelete = Integer.parseInt(scan.nextLine());
+					articleRepository.deleteById((long) articleIdToDelete);
+					break;
+				case 6:
 					String brand = "";
 					String description = "";
 					double price = 0;
-					String category = "";
+					int categoryId = -1;
+					int articleIdToUpdate = -1;
+
+					System.out.println("Modifier un article");
 					try {
-					System.out.println("Enter new article brand:");
-					brand = scan.nextLine();
-					System.out.println("Enter new article description:");
-					description = scan.nextLine();
-					System.out.println("Enter new article price");
-					price = Integer.parseInt(scan.nextLine());
-					System.out.println("Enter new article category:");
-					category = scan.nextLine();
-					
-					Category existingCategory = categoryRepository.findByName((String)category);
-					if(existingCategory == null) {
-						existingCategory = categoryRepository.save(new Category(category));
-					}
-					articleRepository.save(new Article(brand, description, price, existingCategory));
-					System.out.println("Nouvel article créé avec succès");
-					}catch (Exception e) {
+						System.out.println("Article Id to update:");
+						articleIdToUpdate = Integer.parseInt(scan.nextLine());
+						System.out.println("Brand to update:");
+						brand = scan.nextLine();
+						System.out.println("Description to update:");
+						description = scan.nextLine();
+						System.out.println("Price to update:");
+						price = Integer.parseInt(scan.nextLine());
+						System.out.println("Article category ID to update:");
+						categoryId = Integer.parseInt(scan.nextLine());
+
+						articleRepository.updateArticle(brand, description, price, (long) categoryId,
+								(long) articleIdToUpdate);
+						System.out.println("New article successfully created");
+					} catch (Exception e) {
 						System.out.println(e);
 					}
-					System.out.println("testnew Article");
-					break;
-				case 4:
-					System.out.println("Afficher un article");
-					break;
-				case 5:
-					System.out.println("Supprimer un article");
-					break;
-				case 6:
-					System.out.println("Modifier un article");
 					break;
 				case 7:
+					String newCategoryName = "";
 					System.out.println("Ajouter une catégorie");
+					try {
+						System.out.println("Enter new category name:");
+						newCategoryName = scan.nextLine();
+						categoryRepository.save(new Category(newCategoryName));
+					} catch (Exception e) {
+						System.out.println(e);
+					}
 					break;
 				case 8:
+
 					System.out.println("Afficher une catégorie");
+					try {
+						int categoryIdToDisplay = -1;
+						System.out.println("Enter category id to display:");
+						categoryIdToDisplay = Integer.parseInt(scan.nextLine());
+						Category category = categoryRepository.findById((long) categoryIdToDisplay).orElse(null);
+						if (category != null) {
+							System.out.println(category.displayCategory());
+						} else {
+							System.out.println("Your Id doesn't match any category !");
+						}
+					} catch (Exception e) {
+						System.out.println(e);
+					}
 					break;
 				case 9:
 					System.out.println("Supprimer une catégorie");
@@ -139,6 +189,14 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					break;
 				case 11:
 					System.out.println("Afficher tous les articles d'une catégorie");
+					System.out.println("Enter category id to display:");
+					try {
+						int categoryIdToDisplay = -1;
+						categoryIdToDisplay = Integer.parseInt(scan.nextLine());
+						System.out.println(categoryRepository.findById((long) categoryIdToDisplay));
+					} catch (Exception e) {
+						System.out.println(e);
+					}
 					break;
 				case 12:
 					System.out.println("Sortir du programme");

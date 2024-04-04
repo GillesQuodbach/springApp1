@@ -20,7 +20,10 @@ public class Category {
 	public String toString() {
 		return "Category [id=" + id + ", name=" + name + ", articles=" + articles + "]";
 	}
-
+	
+	public String displayCategory() {
+		return "Category [id=" + id + ", name=" + name + "]";
+	}
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
