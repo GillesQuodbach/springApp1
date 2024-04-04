@@ -15,5 +15,7 @@ public List<Category> findByOrderByNameDesc();
 public List<Category> findByOrderByNameAsc();
 
 public List<Category> findByNameStartingWith(String str);
+
+public Category findByName(String str);
 	
 }
