@@ -2,6 +2,7 @@ package fr.fms;
 
 import org.springframework.boot.CommandLineRunner;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import fr.fms.entities.Category;
 
 @SpringBootApplication
 public class SpringShopJpaApplication implements CommandLineRunner {
-
 	@Autowired
 	private CategoryRepository categoryRepository;
 
@@ -67,7 +67,7 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					System.out.println("---------------------------------------------");
 					System.out.println("Afficher tous les articles SANS pagination");
 					System.out.println("---------------------------------------------");
-					System.out.println();
+					displayArticlesHeader();
 					for (Article article : articleRepository.findAll()) {
 						System.out.println(article.toString());
 					}
@@ -78,7 +78,7 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					System.out.println("---------------------------------------------");
 					System.out.println("Afficher tous les articles AVEC pagination");
 					System.out.println("---------------------------------------------");
-					System.out.println();
+					displayArticlesHeader();
 					for (Article article : articleRepository.findAll()) {
 						System.out.println(article.toString());
 					}
@@ -118,7 +118,15 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					System.out.println("Display an article");
 					System.out.println("Enter article Id: ");
 					articleIdToDisplay = Integer.parseInt(scan.nextLine());
-					System.out.println(articleRepository.findById((long) articleIdToDisplay));
+					Optional<Article> article = articleRepository.findById((long) articleIdToDisplay);
+					if (article.isPresent()) {
+						Article articleToDisplay = article.get();
+						displayArticlesHeader();
+						System.out.println(articleToDisplay.toString());
+						
+					} else {
+						System.out.println("No article match");
+					}
 					break;
 				case 5:
 					int articleIdToDelete = -1;
@@ -174,6 +182,7 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 						categoryIdToDisplay = Integer.parseInt(scan.nextLine());
 						Category category = categoryRepository.findById((long) categoryIdToDisplay).orElse(null);
 						if (category != null) {
+							displayOneCategoryHeader();
 							System.out.println(category.displayCategory());
 						} else {
 							System.out.println("Your Id doesn't match any category !");
@@ -203,9 +212,8 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 						categoryIdToUpdate = Integer.parseInt(scan.nextLine());
 						System.out.println("Enter new category name:");
 						categroyName = scan.nextLine();
-						
-						categoryRepository.updateCategory(categroyName,
-								(long) categoryIdToUpdate);
+
+						categoryRepository.updateCategory(categroyName, (long) categoryIdToUpdate);
 						System.out.println("New article successfully updated");
 					} catch (Exception e) {
 						System.out.println(e);
@@ -217,13 +225,22 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					try {
 						int categoryIdToDisplay = -1;
 						categoryIdToDisplay = Integer.parseInt(scan.nextLine());
-						System.out.println(categoryRepository.findById((long) categoryIdToDisplay));
+						
+						Optional<Category> categoryToDisplay = categoryRepository.findById((long) categoryIdToDisplay);
+						if (categoryToDisplay.isPresent()) {
+							Category category = categoryToDisplay.get();
+							System.out.println();
+							displayOneCategoryHeader();
+							System.out.println(category);
+						}
 					} catch (Exception e) {
 						System.out.println(e);
 					}
 					break;
 				case 12:
 					System.out.println("Sortir du programme");
+					System.out.println("A bientôt !");
+					System.exit(0);
 					break;
 				}
 			} catch (Exception e) {
@@ -281,6 +298,28 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 		 * System.out.println(article); // } *
 		 */
 
+	}
+
+	public static void displayArticlesHeader() {
+		String format = "| %-4s | %-10s | %-30s | %-8s |";
+		String header = String.format(format, "ID", "BRAND", "DESCRIPTION", "PRICE");
+		String separator = "+------+------------+------------------------------+--------+";
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(separator).append(System.lineSeparator());
+		stringBuilder.append(header).append(System.lineSeparator());
+		stringBuilder.append(separator).append(System.lineSeparator());
+		System.out.println(stringBuilder);
+	}
+
+	public static void displayOneCategoryHeader() {
+		String format = "| %-4s | %-10s|";
+		String header = String.format(format, "ID", "NAME");
+		String separator = "+------+------------+";
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(separator).append(System.lineSeparator());
+		stringBuilder.append(header).append(System.lineSeparator());
+		stringBuilder.append(separator).append(System.lineSeparator());
+		System.out.println(stringBuilder);
 	}
 
 	public static void displayMenu() {
