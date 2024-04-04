@@ -36,6 +36,7 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 		Category smartphone = categoryRepository.save(new Category("Smartphone"));
 		Category tablet = categoryRepository.save(new Category("Tablet"));
 		Category pc = categoryRepository.save(new Category("PC"));
+		Category test = categoryRepository.save(new Category("Test"));
 
 		articleRepository.save(new Article("Samsung", "S10", 500, smartphone));
 		articleRepository.save(new Article("Samsung", "S9", 350, smartphone));
@@ -127,14 +128,14 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					articleRepository.deleteById((long) articleIdToDelete);
 					break;
 				case 6:
-					String brand = "";
-					String description = "";
-					double price = 0;
-					int categoryId = -1;
-					int articleIdToUpdate = -1;
 
 					System.out.println("Modifier un article");
 					try {
+						String brand = "";
+						String description = "";
+						double price = 0;
+						int categoryId = -1;
+						int articleIdToUpdate = -1;
 						System.out.println("Article Id to update:");
 						articleIdToUpdate = Integer.parseInt(scan.nextLine());
 						System.out.println("Brand to update:");
@@ -183,9 +184,32 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					break;
 				case 9:
 					System.out.println("Supprimer une catégorie");
+					try {
+						int categoryIdToDelete = -1;
+						System.out.println("Enter category id to delete:");
+						categoryIdToDelete = Integer.parseInt(scan.nextLine());
+						categoryRepository.deleteById((long) categoryIdToDelete);
+					} catch (Exception e) {
+						System.out.println(e);
+					}
 					break;
 				case 10:
 					System.out.println("Mettre à jour une catégorie");
+					try {
+						String categroyName = "";
+
+						int categoryIdToUpdate = -1;
+						System.out.println("Article Id to update:");
+						categoryIdToUpdate = Integer.parseInt(scan.nextLine());
+						System.out.println("Enter new category name:");
+						categroyName = scan.nextLine();
+						
+						categoryRepository.updateCategory(categroyName,
+								(long) categoryIdToUpdate);
+						System.out.println("New article successfully updated");
+					} catch (Exception e) {
+						System.out.println(e);
+					}
 					break;
 				case 11:
 					System.out.println("Afficher tous les articles d'une catégorie");
