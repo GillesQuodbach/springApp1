@@ -231,7 +231,11 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 							Category category = categoryToDisplay.get();
 							System.out.println();
 							displayOneCategoryHeader();
-							System.out.println(category);
+							System.out.println(category.displayCategory());
+							displayArticlesHeader();
+							for (Article articles : category.getArticles()) {
+								System.out.println(articles.toString());
+							}
 						}
 					} catch (Exception e) {
 						System.out.println(e);
@@ -301,9 +305,9 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 	}
 
 	public static void displayArticlesHeader() {
-		String format = "| %-4s | %-10s | %-30s | %-8s |";
+		String format = "| %-4s | %-10s | %-10s | %-8s |";
 		String header = String.format(format, "ID", "BRAND", "DESCRIPTION", "PRICE");
-		String separator = "+------+------------+------------------------------+--------+";
+		String separator = "+------+------------+-------------+----------+";
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(separator).append(System.lineSeparator());
 		stringBuilder.append(header).append(System.lineSeparator());
@@ -312,7 +316,7 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 	}
 
 	public static void displayOneCategoryHeader() {
-		String format = "| %-4s | %-10s|";
+		String format = "| %-4s | %-11s|";
 		String header = String.format(format, "ID", "NAME");
 		String separator = "+------+------------+";
 		StringBuilder stringBuilder = new StringBuilder();

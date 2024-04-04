@@ -40,9 +40,9 @@ public class Article implements Serializable {
 
 	@Override
 	public String toString() {
-		String format = "| %-4s | %-10s | %-30s | %-8s |";
+		String format = "| %-4s | %-10s | %-11s | %-8s |";
 
-		String separator = "+------+------------+------------------------------+--------+";
+		String separator = "+------+------------+-------------+----------+";
 		String row = String.format(format, id, brand, description, price);
 
 		StringBuilder stringBuilder = new StringBuilder();

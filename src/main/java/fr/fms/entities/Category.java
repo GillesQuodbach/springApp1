@@ -19,15 +19,15 @@ public class Category {
 		// return "Category [id=" + id + ", name=" + name + ", articles=" + articles +
 		// "]";
 
-		String formatCategory = "| %-4s | %-10s|";
-		String separatorCategory = "+------+------------+";
+		String formatCategory = "| %-4s | %-11s|";
+		String separatorCategory = "+------+---------+";
 
 		String rowCategory = String.format(formatCategory, id, name);
-		String formatArticles = "| %-4s | %-10s | %-30s | %-8s |";
+		String formatArticles = "| %-4s | %-10s | %-10s | %-8s |";
 
 		String emptyLine = "";
 
-		String separatorArticles = "+------+------------+------------------------------+--------+";
+		String separatorArticles = "+------+------------+-------------+----------+";
 		String rowArticles = String.format(formatArticles, id, "BRAND", "DESCRIPTION", "PRICE");
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(separatorCategory).append(System.lineSeparator());
@@ -43,7 +43,7 @@ public class Category {
 
 	public String displayCategory() {
 
-		String format = "| %-4s | %-10s|";
+		String format = "| %-4s | %-11s|";
 		String separator = "+------+------------+";
 		String row = String.format(format, id, name);
 
@@ -68,5 +68,9 @@ public class Category {
 
 	public Category(String name) {
 		this.name = name;
+	}
+	
+	public Collection<Article> getArticles(){
+		return articles;
 	}
 }
