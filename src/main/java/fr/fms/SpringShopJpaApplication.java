@@ -8,6 +8,8 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -38,6 +40,22 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 		Category pc = categoryRepository.save(new Category("PC"));
 		Category test = categoryRepository.save(new Category("Test"));
 
+		articleRepository.save(new Article("Samsung", "S10", 500, smartphone));
+		articleRepository.save(new Article("Samsung", "S9", 350, smartphone));
+		articleRepository.save(new Article("Xiaomi", "MI10", 100, smartphone));
+
+		articleRepository.save(new Article("Samsung", "GalaxyTab", 450, tablet));
+		articleRepository.save(new Article("Apple", "Ipad", 350, tablet));
+
+		articleRepository.save(new Article("Asus", "R510", 500, pc));
+		articleRepository.save(new Article("Samsung", "S10", 500, smartphone));
+		articleRepository.save(new Article("Samsung", "S9", 350, smartphone));
+		articleRepository.save(new Article("Xiaomi", "MI10", 100, smartphone));
+
+		articleRepository.save(new Article("Samsung", "GalaxyTab", 450, tablet));
+		articleRepository.save(new Article("Apple", "Ipad", 350, tablet));
+
+		articleRepository.save(new Article("Asus", "R510", 500, pc));
 		articleRepository.save(new Article("Samsung", "S10", 500, smartphone));
 		articleRepository.save(new Article("Samsung", "S9", 350, smartphone));
 		articleRepository.save(new Article("Xiaomi", "MI10", 100, smartphone));
@@ -78,10 +96,53 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					System.out.println("---------------------------------------------");
 					System.out.println("Afficher tous les articles AVEC pagination");
 					System.out.println("---------------------------------------------");
+					
+					
+					int pageSize = 5;
+
+					Page<Article> page = articleRepository.findAll(PageRequest.of(0, pageSize));
+					System.out.println("N for Next page \nP for Prev page \nQ to quit \nPAGE x (x articles/page)");
 					displayArticlesHeader();
-					for (Article article : articleRepository.findAll()) {
-						System.out.println(article.toString());
+//					for (Article article : articleRepository.findAll()) {
+//						System.out.println(article.toString());
+//					}
+					page.forEach(article -> System.out.println(article.toString()));
+					
+					int totalPages = page.getTotalPages();
+					int currentPage = 0;
+					
+					while(++currentPage <= totalPages || --currentPage >= 0) {
+						int startPage = 0;
+						int endPage = totalPages;
+						
+						System.out.print("PREV");
+						System.out.print("[");
+						
+						for(int i = startPage; i <= endPage; i++) {
+							if(i == currentPage) {
+								System.out.print("{"+i+"}");
+							} else {
+								System.out.print(i + " ");
+							}
+						}
+						System.out.print("]");
+						System.out.print("NEXT");
+						String choice = scan.nextLine().toUpperCase();
+						if (choice.equals("N")) {
+							currentPage++;
+							page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
+							displayArticlesHeader();
+							page.forEach(article -> System.out.println(article.toString()));
+						} else if(choice.equals("P")){
+							currentPage--;
+							page = articleRepository.findAll(PageRequest.of(currentPage - 1, pageSize));
+							displayArticlesHeader();
+							page.forEach(article -> System.out.println(article.toString()));
+						}else if (choice.equals("Q")) {
+							break;
+						}
 					}
+					
 					System.out.println("---------------------------------------------");
 					System.out.println();
 					break;

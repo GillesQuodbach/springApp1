@@ -2,7 +2,8 @@ package fr.fms.dao;
 
 import java.util.List;
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -48,7 +49,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long>{
 	@Query("update Article set description = :description, brand = :brand, price = :price, category.id = :categoryId where id = :id")
 	void updateArticle(@Param("description") String description, @Param("brand") String brand, @Param("price") double price, @Param("categoryId") Long categoryId, @Param("id") Long id);
 
-
+	// TP pagination
+	
+	Page<Article> findAll(Pageable pageable);
 
 
 
