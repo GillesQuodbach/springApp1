@@ -99,49 +99,76 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					
 					
 					int pageSize = 5;
-
+					int currentPage = 0;
 					Page<Article> page = articleRepository.findAll(PageRequest.of(0, pageSize));
-					System.out.println("N for Next page \nP for Prev page \nQ to quit \nPAGE x (x articles/page)");
+					int totalPages = page.getTotalPages();
 					displayArticlesHeader();
+					page.forEach(article -> System.out.println(article.toString()));
+					System.out.print("PREV [");
+					for(int i = 0; i < totalPages;i++) {
+						if(i == currentPage) {
+							System.out.print("{" + (i+1) + "}");
+						} else {
+							System.out.print(i+1 + " ");
+						}
+					}
+					System.out.print("] NEXT\n");
+					System.out.println();
+					System.out.println("N for Next page \nP for Prev page \nQ to quit \nPAGE x (x articles/page)");
+					
+					while(true) {
+
 //					for (Article article : articleRepository.findAll()) {
 //						System.out.println(article.toString());
 //					}
-					page.forEach(article -> System.out.println(article.toString()));
 					
-					int totalPages = page.getTotalPages();
-					int currentPage = 0;
 					
-					while(++currentPage <= totalPages || --currentPage >= 0) {
-						int startPage = 0;
-						int endPage = totalPages;
-						
-						System.out.print("PREV");
-						System.out.print("[");
-						
-						for(int i = startPage; i <= endPage; i++) {
-							if(i == currentPage) {
-								System.out.print("{"+i+"}");
-							} else {
-								System.out.print(i + " ");
-							}
-						}
-						System.out.print("]");
-						System.out.print("NEXT");
-						String choice = scan.nextLine().toUpperCase();
-						if (choice.equals("N")) {
+					
+					
+					
+					
+					String choice = scan.nextLine().toUpperCase();
+					if(choice.equals("N")) {
+						if (currentPage < totalPages - 1) {
 							currentPage++;
 							page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
-							displayArticlesHeader();
 							page.forEach(article -> System.out.println(article.toString()));
-						} else if(choice.equals("P")){
-							currentPage--;
-							page = articleRepository.findAll(PageRequest.of(currentPage - 1, pageSize));
-							displayArticlesHeader();
-							page.forEach(article -> System.out.println(article.toString()));
-						}else if (choice.equals("Q")) {
-							break;
+							System.out.print("PREV [");
+							for(int i = 0; i < totalPages;i++) {
+								if(i == currentPage) {
+									System.out.print("{" + (i+1) + "}");
+								} else {
+									System.out.print(i+1 + " ");
+								}
+							}
+							System.out.print("] NEXT\n");
+						} else if (currentPage == totalPages - 1) {
+							System.out.println("Vous êtes à la dernière page");
 						}
+						
+					} else if(choice.equals("P")) {
+						if (currentPage > 0) {
+							currentPage--;
+							page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
+							
+							page.forEach(article -> System.out.println(article.toString()));
+							System.out.print("PREV [");
+							for(int i = 0; i < totalPages;i++) {
+								if(i == currentPage) {
+									System.out.print("{" + (i+1) + "}");
+								} else {
+									System.out.print(i+1 + " ");
+								}
+							}
+							System.out.print("] NEXT\n");
+						} else if (currentPage == 0) {
+							System.out.println("Vous êtes à la première page");
+						}
+					} else if(choice.equals("Q")) {
+						break;
 					}
+				}
+				
 					
 					System.out.println("---------------------------------------------");
 					System.out.println();
