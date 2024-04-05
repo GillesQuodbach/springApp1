@@ -30,10 +30,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long>{
 	public List<Article> findByCategoryId(Long categoryId);
 	
 	//Exo 1.2
-	// TODO afficher tous les articles en base
 	public List<Article> findByBrandLike(String brand);
 	public List<Article> findByDescriptionIs(String description);
-	
 	public List<Article> findAll();
 	
 	//Exo 1.3
@@ -50,7 +48,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long>{
 	void updateArticle(@Param("description") String description, @Param("brand") String brand, @Param("price") double price, @Param("categoryId") Long categoryId, @Param("id") Long id);
 
 	// TP pagination
-	
 	Page<Article> findAll(Pageable pageable);
 
 

@@ -60,19 +60,3 @@ public class Article implements Serializable {
 	}
 
 }
-
-//public String toString() {
-//    String format = "| %-4s | %-10s | %-30s | %-8s |";
-//    String header = String.format(format, "ID", "BRAND", "DESCRIPTION", "PRICE");
-//    String separator = "+------+------------+------------------------------+--------+";
-//    String row = String.format(format, id, brand, description, price);
-//
-//    StringBuilder stringBuilder = new StringBuilder();
-//    stringBuilder.append(separator).append(System.lineSeparator());
-//    stringBuilder.append(header).append(System.lineSeparator());
-//    stringBuilder.append(separator).append(System.lineSeparator());
-//    stringBuilder.append(row).append(System.lineSeparator());
-//    stringBuilder.append(separator).append(System.lineSeparator());
-//
-//    return stringBuilder.toString();
-//}

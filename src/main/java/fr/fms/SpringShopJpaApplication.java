@@ -97,93 +97,60 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					System.out.println("Afficher tous les articles AVEC pagination");
 					System.out.println("---------------------------------------------");
 					boolean backToPageMenu = true;
-while(backToPageMenu) {
-					int pageSize = 5;
-					int currentPage = 0;
-					Page<Article> page = articleRepository.findAll(PageRequest.of(0, pageSize));
-					int totalPages = page.getTotalPages();
-					displayArticlesHeader();
-					page.forEach(article -> System.out.println(article.toString()));
-					System.out.print("PREV [");
-					for (int i = 0; i < totalPages; i++) {
-						if (i == currentPage) {
-							System.out.print("{" + (i + 1) + "}");
-						} else {
-							System.out.print(i + 1 + " ");
+					while (backToPageMenu) {
+						int pageSize = 5;
+						int currentPage = 0;
+						Page<Article> page = articleRepository.findAll(PageRequest.of(0, pageSize));
+						int totalPages = page.getTotalPages();
+						displayArticlesHeader();
+						page.forEach(article -> System.out.println(article.toString()));
+						displayPagination(totalPages, currentPage);
+						displayPaginationMenu();
+						boolean restart = true;
+
+						while (restart) {
+							String choice = scan.nextLine().toUpperCase();
+							if (choice.equals("N")) {
+								if (currentPage < totalPages - 1) {
+									currentPage++;
+									page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
+									page.forEach(article -> System.out.println(article.toString()));
+									displayPagination(totalPages, currentPage);
+									System.out.println("Enter MENU to go back to page menu");
+								} else if (currentPage == totalPages - 1) {
+									System.out.println("Vous êtes à la dernière page");
+								}
+
+							} else if (choice.equals("P")) {
+								if (currentPage > 0) {
+									currentPage--;
+									page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
+
+									page.forEach(article -> System.out.println(article.toString()));
+									displayPagination(totalPages, currentPage);
+									System.out.println("Enter MENU to go back to page menu");
+								} else if (currentPage == 0) {
+									System.out.println("Vous êtes à la première page");
+								}
+							} else if (choice.equals("Q")) {
+								restart = false;
+								backToPageMenu = false;
+							} else if (choice.equals("PAGE")) {
+								System.out.println("Entrer le nombre d'articles par page (defaut 5)");
+								int articlesPerPageNbr = Integer.parseInt(scan.nextLine());
+								pageSize = articlesPerPageNbr;
+								currentPage = 0;
+								page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
+								displayArticlesHeader();
+								page.forEach(article -> System.out.println(article.toString()));
+								displayPagination(totalPages, currentPage);
+								System.out.println("Enter MENU to go back to page menu");
+
+							} else if (choice.equals("MENU")) {
+								restart = false;
+							}
 						}
 					}
-					System.out.print("] NEXT\n");
-					System.out.println();
-					System.out.println("N for Next page \nP for Prev page \nQ to quit \nPAGE x (x articles/page)");
-					boolean restart = true;
-					
-					while (restart) {
-						String choice = scan.nextLine().toUpperCase();
-						if (choice.equals("N")) {
-							if (currentPage < totalPages - 1) {
-								currentPage++;
-								page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
-								page.forEach(article -> System.out.println(article.toString()));
-								System.out.print("PREV [");
-								for (int i = 0; i < totalPages; i++) {
-									if (i == currentPage) {
-										System.out.print("{" + (i + 1) + "}");
-									} else {
-										System.out.print(i + 1 + " ");
-									}
-								}
-								System.out.print("] NEXT\n");
-								System.out.println("Enter MENU to go back to page menu");
-							} else if (currentPage == totalPages - 1) {
-								System.out.println("Vous êtes à la dernière page");
-							}
-
-						} else if (choice.equals("P")) {
-							if (currentPage > 0) {
-								currentPage--;
-								page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
-
-								page.forEach(article -> System.out.println(article.toString()));
-								System.out.print("PREV [");
-								for (int i = 0; i < totalPages; i++) {
-									if (i == currentPage) {
-										System.out.print("{" + (i + 1) + "}");
-									} else {
-										System.out.print(i + 1 + " ");
-									}
-								}
-								System.out.print("] NEXT\n");
-								System.out.println("Enter MENU to go back to page menu");
-							} else if (currentPage == 0) {
-								System.out.println("Vous êtes à la première page");
-							}
-						} else if (choice.equals("Q")) {
-							restart = false;
-							backToPageMenu = false;
-						} else if (choice.equals("PAGE")) {
-							System.out.println("Entrer le nombre d'articles par page (defaut 5)");
-							int articlesPerPageNbr = Integer.parseInt(scan.nextLine());
-							pageSize = articlesPerPageNbr;
-							currentPage = 0;
-							page = articleRepository.findAll(PageRequest.of(currentPage, pageSize));
-							displayArticlesHeader();
-							page.forEach(article -> System.out.println(article.toString()));
-							System.out.print("PREV [");
-							for (int i = 0; i < totalPages; i++) {
-								if (i == currentPage) {
-									System.out.print("{" + (i + 1) + "}");
-								} else {
-									System.out.print(i + 1 + " ");
-								}
-							}
-							System.out.print("] NEXT\n");
-							System.out.println("Enter MENU to go back to page menu");
-							
-						} else if (choice.equals("MENU")) {
-							restart = false;
-						}
-					}
-				}
 					System.out.println("---------------------------------------------");
 					System.out.println();
 					break;
@@ -253,9 +220,7 @@ while(backToPageMenu) {
 					}
 					break;
 				case 6:
-
 					System.out.println("Modifier un article");
-					// TODO si ID pas bon
 					try {
 						String brand = "";
 						String description = "";
@@ -436,6 +401,24 @@ while(backToPageMenu) {
 
 	}
 
+	public static void displayPagination(int totalPages,int currentPage) {
+		System.out.print("PREV [");
+		for (int i = 0; i < totalPages; i++) {
+			if (i == currentPage) {
+				System.out.print("{" + (i + 1) + "}");
+			} else {
+				System.out.print(i + 1 + " ");
+			}
+		}
+		System.out.print("] NEXT\n");
+		System.out.println();
+		
+	}
+	
+	public static void displayPaginationMenu() {
+		System.out.println("N for Next page \nP for Prev page \nQ to quit \nPAGE x (x articles/page)");
+	}
+	
 	public static void displayArticlesHeader() {
 		String format = "| %-4s | %-10s | %-10s | %-8s |";
 		String header = String.format(format, "ID", "BRAND", "DESCRIPTION", "PRICE");

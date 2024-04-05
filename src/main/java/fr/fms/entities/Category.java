@@ -16,9 +16,6 @@ public class Category {
 
 	@Override
 	public String toString() {
-		// return "Category [id=" + id + ", name=" + name + ", articles=" + articles +
-		// "]";
-
 		String formatCategory = "| %-4s | %-11s|";
 		String separatorCategory = "+------+---------+";
 
@@ -69,8 +66,8 @@ public class Category {
 	public Category(String name) {
 		this.name = name;
 	}
-	
-	public Collection<Article> getArticles(){
+
+	public Collection<Article> getArticles() {
 		return articles;
 	}
 }
