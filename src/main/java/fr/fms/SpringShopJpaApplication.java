@@ -106,6 +106,7 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 						Category existingCategory = categoryRepository.findByName((String) category);
 						if (existingCategory == null) {
 							existingCategory = categoryRepository.save(new Category(category));
+							System.out.println("New category created with your article");
 						}
 						articleRepository.save(new Article(brand, description, price, existingCategory));
 						System.out.println("New article successfully created");
@@ -117,27 +118,42 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					int articleIdToDisplay = -1;
 					System.out.println("Display an article");
 					System.out.println("Enter article Id: ");
-					articleIdToDisplay = Integer.parseInt(scan.nextLine());
-					Optional<Article> article = articleRepository.findById((long) articleIdToDisplay);
-					if (article.isPresent()) {
-						Article articleToDisplay = article.get();
-						displayArticlesHeader();
-						System.out.println(articleToDisplay.toString());
-						
-					} else {
-						System.out.println("No article match");
+					try {
+						articleIdToDisplay = Integer.parseInt(scan.nextLine());
+						Optional<Article> article = articleRepository.findById((long) articleIdToDisplay);
+						if (article.isPresent()) {
+							Article articleToDisplay = article.get();
+							displayArticlesHeader();
+							System.out.println(articleToDisplay.toString());
+
+						} else {
+							System.out.println("No article match");
+						}
+					} catch (Exception e) {
+						System.out.println(e);
 					}
 					break;
 				case 5:
 					int articleIdToDelete = -1;
 					System.out.println("Supprimer un article");
 					System.out.println("Enter article Id: ");
-					articleIdToDelete = Integer.parseInt(scan.nextLine());
-					articleRepository.deleteById((long) articleIdToDelete);
+					try {
+						articleIdToDelete = Integer.parseInt(scan.nextLine());
+						Optional<Article> article = articleRepository.findById((long) articleIdToDelete);
+						if (article.isPresent()) {
+							articleRepository.deleteById((long) articleIdToDelete);
+							System.out.println("Article successfully deleted");
+						} else {
+							System.out.println("No article match your id");
+						}
+					} catch (Exception e) {
+						System.out.println(e);
+					}
 					break;
 				case 6:
 
 					System.out.println("Modifier un article");
+					// TODO si ID pas bon
 					try {
 						String brand = "";
 						String description = "";
@@ -146,18 +162,23 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 						int articleIdToUpdate = -1;
 						System.out.println("Article Id to update:");
 						articleIdToUpdate = Integer.parseInt(scan.nextLine());
-						System.out.println("Brand to update:");
-						brand = scan.nextLine();
-						System.out.println("Description to update:");
-						description = scan.nextLine();
-						System.out.println("Price to update:");
-						price = Integer.parseInt(scan.nextLine());
-						System.out.println("Article category ID to update:");
-						categoryId = Integer.parseInt(scan.nextLine());
+						Optional<Article> article = articleRepository.findById((long) articleIdToUpdate);
+						if (article.isPresent()) {
+							System.out.println("Brand to update:");
+							brand = scan.nextLine();
+							System.out.println("Description to update:");
+							description = scan.nextLine();
+							System.out.println("Price to update:");
+							price = Integer.parseInt(scan.nextLine());
+							System.out.println("Article category ID to update:");
+							categoryId = Integer.parseInt(scan.nextLine());
 
-						articleRepository.updateArticle(brand, description, price, (long) categoryId,
-								(long) articleIdToUpdate);
-						System.out.println("New article successfully created");
+							articleRepository.updateArticle(brand, description, price, (long) categoryId,
+									(long) articleIdToUpdate);
+							System.out.println("New article successfully updated");
+						} else {
+							System.out.println("No article match your ID");
+						}
 					} catch (Exception e) {
 						System.out.println(e);
 					}
@@ -180,10 +201,10 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 						int categoryIdToDisplay = -1;
 						System.out.println("Enter category id to display:");
 						categoryIdToDisplay = Integer.parseInt(scan.nextLine());
-						Category category = categoryRepository.findById((long) categoryIdToDisplay).orElse(null);
-						if (category != null) {
+						Optional<Category> category = categoryRepository.findById((long) categoryIdToDisplay);
+						if (category.isPresent()) {
 							displayOneCategoryHeader();
-							System.out.println(category.displayCategory());
+							System.out.println(category);
 						} else {
 							System.out.println("Your Id doesn't match any category !");
 						}
@@ -197,7 +218,13 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 						int categoryIdToDelete = -1;
 						System.out.println("Enter category id to delete:");
 						categoryIdToDelete = Integer.parseInt(scan.nextLine());
-						categoryRepository.deleteById((long) categoryIdToDelete);
+						Optional<Category> category = categoryRepository.findById((long) categoryIdToDelete);
+						if (category.isPresent()) {
+							categoryRepository.deleteById((long) categoryIdToDelete);
+							System.out.println("Category successfully deleted");
+						} else {
+							System.out.println("Your id doesn't match a category");
+						}
 					} catch (Exception e) {
 						System.out.println(e);
 					}
@@ -206,15 +233,19 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					System.out.println("Mettre à jour une catégorie");
 					try {
 						String categroyName = "";
-
 						int categoryIdToUpdate = -1;
 						System.out.println("Article Id to update:");
 						categoryIdToUpdate = Integer.parseInt(scan.nextLine());
-						System.out.println("Enter new category name:");
-						categroyName = scan.nextLine();
+						Optional<Category> category = categoryRepository.findById((long) categoryIdToUpdate);
+						if (category.isPresent()) {
+							System.out.println("Enter new category name:");
+							categroyName = scan.nextLine();
+							categoryRepository.updateCategory(categroyName, (long) categoryIdToUpdate);
+							System.out.println("New article successfully updated");
+						} else {
+							System.out.println("No category match your Id");
+						}
 
-						categoryRepository.updateCategory(categroyName, (long) categoryIdToUpdate);
-						System.out.println("New article successfully updated");
 					} catch (Exception e) {
 						System.out.println(e);
 					}
@@ -225,7 +256,6 @@ public class SpringShopJpaApplication implements CommandLineRunner {
 					try {
 						int categoryIdToDisplay = -1;
 						categoryIdToDisplay = Integer.parseInt(scan.nextLine());
-						
 						Optional<Category> categoryToDisplay = categoryRepository.findById((long) categoryIdToDisplay);
 						if (categoryToDisplay.isPresent()) {
 							Category category = categoryToDisplay.get();
